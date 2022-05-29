@@ -52,7 +52,7 @@ from keras import Model
 # - data was downloaded from https://www.deepsig.io/datasets
 
 ##################################### with noise ###############################################
-Xd = pickle.load(open("/gpu01/qiaojiansen/2020_12_20/rice_tp_data_1024/radioml_11class_rice_x_hn_1024.pkl", 'rb'),
+Xd = pickle.load(open("/gpu01/qiaojiansen/2020_12_23/dataset/rice_alldb_1k/rice_x_h_1024_alldb_1000.pkl", 'rb'),
                  encoding='latin1')
 
 test_snrs, mods = map(lambda j: sorted(list(set(map(lambda x: x[j], Xd.keys())))), [1, 0])
@@ -77,7 +77,7 @@ X_train = X[train_idx]
 X_test = X[test_idx]
 
 ###################################### without noise ######################################
-Xd_nonoise = pickle.load(open("/gpu01/qiaojiansen/2020_12_20/rice_tp_data_1024/radioml_11class_rice_x_h_1024.pkl", 'rb'),
+Xd_nonoise = pickle.load(open("/gpu01/qiaojiansen/2020_12_23/dataset/rice_alldb_1k/rice_x_h_n_1024_alldb_1000.pkl", 'rb'),
                  encoding='latin1')
 
 X_nonoise = []
