@@ -5,9 +5,9 @@ Multitask Learning  Modulation Classification
 This project is the code for our paper "Blind Modulation Classification Under Uncertain Noise Conditions: A Multitask Learning Approach".
 
 # Version
-tensorflow=1.12.0
+tensorflow>=1.12.0
 
-Keras=2.2.4
+Keras>=2.2.4
 
 # Citations
 
