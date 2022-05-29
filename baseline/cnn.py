@@ -34,11 +34,11 @@ import pickle, random, time
 from keras.layers import LSTM, CuDNNLSTM, BatchNormalization
 from keras.layers import TimeDistributed,Subtract
 from keras import layers
-
+from keras.callbacks import CSVLogger, ModelCheckpoint, LearningRateScheduler
 # ## Load the dataset
 # - data was downloaded from https://www.deepsig.io/datasets
 
-Xd = pickle.load(open("/gpu01/qiaojiansen/2020_12_14/data/radioml_10class_rice_x_hn.pkl", 'rb'), encoding = 'latin1')
+Xd = pickle.load(open("/gpu01/qiaojiansen/2020_12_23/dataset/rice_alldb_1k/rice_x_h_n_1024_alldb_1000.pkl", 'rb'), encoding = 'latin1')
 test_snrs,mods = map(lambda j: sorted( list( set( map( lambda x: x[j], Xd.keys() ) ) ) ), [1,0])
 X = []
 lbl = []
@@ -125,23 +125,23 @@ cnn2.summary()
 
 # ### Parameterize the Training Process
 # Number of epochs
-epochs = 200
+epochs = 400
 # Training batch size
 # batch_size = 1024
-batch_size = 1024
+batch_size = 512
 
 # ## Train the networks
 
 #train CNN2
 start = time.time()
 
-save_dir = './rice_cnn2/'
+save_dir = './rice_cnn2_1024_99/'
 
 if not os.path.exists(save_dir):
     os.mkdir(save_dir)
 
-
-filepath = save_dir + 'rice_cnn2.h5'
+csv_logger = CSVLogger(save_dir+'/log.csv', append=True, separator=',')
+filepath = save_dir + 'rice_cnn20.h5'
 
 history_cnn2 = cnn2.fit(X_train,
     Y_train,
@@ -152,8 +152,8 @@ history_cnn2 = cnn2.fit(X_train,
     validation_data=(X_test, Y_test),
     class_weight='auto',
     callbacks = [
-        keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=0, save_best_only=True, mode='auto'),
-        keras.callbacks.EarlyStopping(monitor='val_loss', patience=20, verbose=0, mode='auto')
+        keras.callbacks.ModelCheckpoint(filepath, monitor='val_loss', verbose=0, save_best_only=True, mode='auto'),csv_logger,
+        keras.callbacks.EarlyStopping(monitor='val_loss', patience=50, verbose=0, mode='auto')
     ])
 cnn2.load_weights(filepath)
 end = time.time()
@@ -162,7 +162,12 @@ print('CNN2 Training time = ' + str(round(duration/60,5)) + 'minutes')
 
 
 # Plot confusion matrix
+start = time.time()
 test_Y_hat = cnn2.predict(X_test, batch_size=batch_size)
+end = time.time()
+duration = end - start
+print('base-CNN2 testing time = ' + str(duration) + 's')
+
 conf = np.zeros([len(classes),len(classes)])
 confnorm = np.zeros([len(classes),len(classes)])
 for i in range(0,X_test.shape[0]):
@@ -180,9 +185,9 @@ acc = 1.0*cor/(cor+ncor)
 # ### Accuracy by SNR (Confusion Matrices @ -20 dB and 20 dB)
 
 # create one hot labels
-labels_oh       = np.eye(10)
-samples_db      = np.zeros((20, 10000, 2, 256))
-truth_labels_db = np.zeros((20, 10000, 10))
+labels_oh       = np.eye(11)
+samples_db      = np.zeros((20, 11000, 2, 1024))
+truth_labels_db = np.zeros((20, 11000, 11))
 
 # Pull out the data by SNR
 for i in range(len(test_snrs)):
@@ -215,9 +220,7 @@ for s in range(20):
     acc_cnn2[s] = 1.0*cor/(cor+ncor)
 # Save results to a pickle file for plotting later
 print(acc_cnn2)
-np.save(save_dir + 'rice_cnn2.npy', acc_cnn2)
-
-
+np.save(save_dir + 'rice_cnn20.npy', acc_cnn2)
 
 
 
