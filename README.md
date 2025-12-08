@@ -11,6 +11,10 @@ Keras>=2.2.4
 
 # Citations
 
+# Dataset
+
+The download links for the datasets "rice_x_h_1024_alldb_1000" and "rice_x_h_n_1024_alldb_1000" mentioned in the paper are as follows: xxx, where "n" indicates the noisy version.
+
 @ARTICLE{9705601,
   author={Qiao, Jiansen and Chen, Wei and Chen, Jie and Ai, Bo},
   journal={IEEE Communications Letters}, 
