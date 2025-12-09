@@ -13,9 +13,9 @@ Keras>=2.2.4
 
 # Dataset
 
-The download links for the datasets "rice_x_h_1024_alldb_1000" and "rice_x_h_n_1024_alldb_1000" mentioned in the paper are as follows: [xxx](https://pan.baidu.com/s/1QZjZL19iQW2MFHE52aLfnQ?pwd=vhup), 
+The download links for the datasets "rice_x_h_1024_alldb_1000" and "rice_x_h_n_1024_alldb_1000" mentioned in the paper are as follows: [rice_x_h_1024_alldb_1000](https://pan.baidu.com/s/1QZjZL19iQW2MFHE52aLfnQ?pwd=vhup).
 
-where "n" indicates the noisy version.
+Among them, rice_x_h_n_1024_alldb_1000.pkl contains noisy data, and rice_x_h_1024_alldb_1000.pkl is the corresponding noise-free data.
 
 # Citations
 @ARTICLE{9705601,
